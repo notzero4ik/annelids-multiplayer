@@ -34,3 +34,42 @@ all of this i took from the Packet Capture app, because its actually stores requ
 while making this page i found out that some bytes actually differs in second packet ("08 3c 10 f7 80 04 18 **ea e1 04** 28 00")
 even although it doesnt affect next packets that might relate to something, you can try and find it by yourself
 ## understanding response
+after launching the program i gor this response:
+```
+'\x16\x02\x00\x00\x03\x00\n&\x18\xf7\x80\x04M<@\x00\x00"\x01-*\x12maps/corridors.map0\x028\x00@\x06\n!\x18\xf7\x80\x04M<$\x00\x00"\x01-*\rmaps/xmas.map0\x068\x00@\x06\n"\x18\xf7\x80\x04M<L\x00\x00"\x04100k*\x0bmaps/2D.map0\x018\x04@\x06\n#\x18\xf7\x80\x04M<,\x00\x00"\x01-*\x0frandom_oblivion0\t8\x00@\x06\n#\x18\xf7\x80\x04M<T\x00\x00"\x01-*\x0frandom_oblivion0\t8\x04@\x06\n\x1f\x18\xf7\x80\x04M<4\x00\x00"\x01-*\x0brandom_city0\x018\x04@\x06\n \x18\xf7\x80\x04M<\x0c\x00\x00"\x01-*\x0crandom_pipes0\x018\x05@\x06\n\x1e\x18\xf7\x80\x04M<\x18\x00\x00"\x01-*\nrandom_ice0\x018\x06@\x06\n\x1e\x18\xf7\x80\x04M<\x14\x00\x00"\x01-*\nrandom_ice0\x018\x01@\x06\n"\x18\xf7\x80\x04M<\x08\x00\x00"\x01-*\x0erandom_electro0\x048\x00@\x06\n\x1e\x18\xf7\x80\x04M<\x04\x00\x00"\x01-*\nrandom_sea0\x088\x00@\x06\n#\x18\xf7\x80\x04M<\x00\x00\x00"\x01-*\x0fmaps/igloos.map0\x038\x00@\x06\n\x1f\x18\xf7\x80\x04M<l\x00\x00"\x01-*\x0brandom_city0\x058\x02@\x06\n&\x18\xf7\x80\x04M<D\x00\x00"\x01-*\x12maps/corridors.map0\x058\x00@\x06\n \x18\xf7\x80\x04M< \x00\x00"\x01-*\x0crandom_space0\x078\x00@\x06'
+```
+yea its not really readable right?
+
+however after deeper look we can see that it actually sends info for every room in one byte. look closer:
+```
+\x12maps/corridors.map0\x058\x00@\x06\n \x18\xf7\x80\x04M<
+```
+**maps/corridors.map** obviously stands for the map
+**\x058** - its actually gamemode in the room. if you will look at every line you can see that this byte differs. so we can try and parse that!
+```
+d=d.split('"')
+for i in d:
+	if "x018" in i:
+		if "100k" in i:
+			s = "deathmatch (100 kills)"
+		else:
+			s = "deathmatch"
+	elif "x028" in i:
+		s = "team deathmatch"
+	elif "x038" in i:
+		s = "ctf"
+	elif "x048" in i:
+		s = "conq"
+	elif "x058" in i:
+		s = "koth"
+	elif "x068" in i:
+		s = "egg"
+	elif "x078" in i:
+		s = "team egg"
+	elif "x088" in i:
+		s = "crown"
+	elif "t8" in i:
+		s = "zombie"
+```
+in this code we splitted lines by quote into the list, then we parsed the lines and created a string to store gamemode of every room! now our program will automatically find gamemode for every room!
+but we still dont know amount of players in the room. if you will look once more on the line you can spot **"\x00@\x06"** bytes. as you already guessed, its exactly what we need!
