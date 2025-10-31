@@ -102,3 +102,10 @@ now we can take our line that we firstly mentioned and turn it in the actual roo
 >>> 00/06
 ```
 now we can easily get the list of available games!
+
+you might also notice than there is two servers in the output. After some digging i found out that there is actually servers for Spain (ms.annelids.io) and Russia (api.annelids.io). 
+## Getting inside of room
+Alright, we know how to view available games. But can we view only one game that we needed?
+
+## Epilogue
+If you see this, thank you very much for reading! I actually worked really hard to get all this info. If you liked this, you might want to join my telegram channel @annelidss!
