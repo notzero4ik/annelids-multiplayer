@@ -88,3 +88,17 @@ for i in d:
 ```
 in this code we splitted lines by quote into the list, then we parsed the lines and created a string to store gamemode of every room! now our program will automatically find gamemode for every room!
 but we still dont know amount of players in the room. if you will look once more on the line you can spot **"\x00@\x06"** bytes. as you already guessed, its exactly what we need!
+```
+    ind = i.find("@")
+	cnt = i[ind-2:ind+5].replace("x", "").replace("@", "")
+	print(s + "    " + cnt)
+```
+here we find index of these bytes, then removing "x" and "@" from them, and printing the result!
+now we can take our line that we firstly mentioned and turn it in the actual room description!
+```
+\x12maps/corridors.map0\x058\x00@\x06\n \x18\xf7\x80\x04M<
+>>> King of the hill
+>>> Corridors
+>>> 00/06
+```
+now we can easily get the list of available games!
