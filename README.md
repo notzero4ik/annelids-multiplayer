@@ -1,6 +1,9 @@
 # annelids-multiplayer
 this repository was created to make a conclusion on what i learned and found about Annelids servers.
-in the future i might make this repository open if i will get bored or game will die
+in the future i might make this repository open if i will get bored or game will die, so if you want to fully understand this page make sure to have knowledge of:
+- sockets, ports, webpages
+- python 3 and socket library
+- linux terminal/termux
 ## Capturing packets
 the first thing i started doing was capturing and analysing game packets. it was easily done via Packet Capture app cause game doesnt use SSL pinging.
 
@@ -44,7 +47,19 @@ however after deeper look we can see that it actually sends info for every room 
 ```
 \x12maps/corridors.map0\x058\x00@\x06\n \x18\xf7\x80\x04M<
 ```
-**maps/corridors.map** obviously stands for the map
+**maps/corridors.map** obviously stands for the map. there is enumerator in game code which accepts raw map name and returns in-game map name like this:
+```
+random_pipes
+>>> Labyrinth
+```
+so i decided to just make dictionary like this and then use it in my code:
+```
+k = map_enum.keys()
+	for j in k:
+		if j in i:
+			s = f"{s}    {map_enum[j]}"
+```
+we're getting all keys of this dictionary, checking if there is any key from this dictionary in the line, and then adding it into our string
 **\x058** - its actually gamemode in the room. if you will look at every line you can see that this byte differs. so we can try and parse that!
 ```
 d=d.split('"')
