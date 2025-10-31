@@ -30,4 +30,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
 ill assume you already know what python and socket library is, so i wont describe that
 however you can think: "what do we even sending to this server?"
 all of this i took from the Packet Capture app, because its actually stores requests in hex which is really useful for replicating game behaviour 
+
 while making this page i found out that some bytes actually differs in second packet ("08 3c 10 f7 80 04 18 **ea e1 04** 28 00")
+even although it doesnt affect next packets that might relate to something, you can try and find it by yourself
+## understanding response
